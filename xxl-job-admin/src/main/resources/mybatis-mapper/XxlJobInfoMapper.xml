@@ -226,4 +226,11 @@
 		WHERE id = #{id}
 	</update>
 
+	<select id="countHealthCheckTask" resultType="int">
+		SELECT count(1)
+		FROM xxl_job_info AS t
+		where t.trigger_status = 1
+		and t.job_desc = 'health_check';
+	</select>
+
 </mapper>

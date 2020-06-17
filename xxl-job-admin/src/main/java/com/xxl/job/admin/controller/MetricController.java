@@ -37,7 +37,7 @@ public class MetricController {
         // 查询1分钟内执行成功的health_check task数量
         Date triggerTimeEnd = new Date();
         Date triggerTimeStart = new Date(triggerTimeEnd.getTime() - 60 * 1000);
-        int successHealthCheckTaskCount = xxlJobLogDao.pageListCount(0, 0, 0, 0, triggerTimeStart, triggerTimeEnd, 1);
+        int successHealthCheckTaskCount = xxlJobLogDao.countHealthCheckTaskSuccess(triggerTimeStart, triggerTimeEnd);
 
         List<CustomizeMetric> metrics = new ArrayList<>();
         CustomizeMetric metric1 = new CustomizeMetric("xxl_health_check_task_count", healthCheckTaskCount);

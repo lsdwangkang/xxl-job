@@ -258,4 +258,15 @@
 			)
 	</select>
 
+	<select id="countHealthCheckTaskSuccess" resultType="int">
+		SELECT count(1)
+		FROM xxl_job_log l join xxl_job_info i on l.job_id = i.id
+		where i.job_desc = 'health_check' and l.trigger_code = 200
+		<if test="triggerTimeStart != null">
+			AND l.trigger_time <![CDATA[ >= ]]> #{triggerTimeStart}
+		</if>
+		<if test="triggerTimeEnd != null">
+			AND l.trigger_time <![CDATA[ <= ]]> #{triggerTimeEnd}
+		</if>
+	</select>
 </mapper>

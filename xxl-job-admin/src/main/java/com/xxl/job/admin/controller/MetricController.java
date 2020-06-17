@@ -26,7 +26,7 @@ public class MetricController {
     @Resource
     private XxlJobLogDao xxlJobLogDao;
 
-    @RequestMapping("")
+    @RequestMapping(value = "", produces = {"application/openmetrics-text"})
     @ResponseBody
     @PermissionLimit(limit=false)
     public String getMetrics() {

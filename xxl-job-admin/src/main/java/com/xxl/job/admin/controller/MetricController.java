@@ -5,7 +5,9 @@ import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.dao.XxlJobLogDao;
 import com.xxl.job.admin.dao.XxlJobRegistryDao;
+import io.prometheus.client.exporter.common.TextFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,7 +28,7 @@ public class MetricController {
     @Resource
     private XxlJobLogDao xxlJobLogDao;
 
-    @RequestMapping(value = "", produces = {"application/openmetrics-text"})
+    @RequestMapping(value = "", produces = TextFormat.CONTENT_TYPE_004)
     @ResponseBody
     @PermissionLimit(limit=false)
     public String getMetrics() {
@@ -94,11 +96,12 @@ public class MetricController {
         StringBuilder sb = new StringBuilder();
         for (CustomizeMetric metric : metricList) {
             sb.append(metric.getName()).append("{");
-            if (metric.getLabels() != null) {
+            if (!CollectionUtils.isEmpty(metric.getLabels())) {
                 for (Map.Entry<String,String> entry : metric.getLabels().entrySet()) {
                     sb.append(entry.getKey()).append("=\"");
                     sb.append(entry.getValue()).append("\",");
                 }
+                sb.deleteCharAt(sb.length() - 1).toString();
             }
             sb.append("} ").append(metric.getValue()).append(System.getProperty("line.separator"));
         }
